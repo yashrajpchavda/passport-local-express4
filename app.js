@@ -35,6 +35,13 @@ app.use( express.static( path.join( __dirname, "public" ) ) );
 app.use( "/", index );
 app.use( "/users", users );
 
+const Account = require( "./models/account" );
+passport.use( new LocalStrategy( Account.authenticate() ) );
+passport.serializeUser( Account.serializeUser() );
+passport.deserializeUser( Account.deserializeUser() );
+
+mongoose.connect( "mongodb://localhost:27017/passport_local_mongoose_express4" );
+
 // catch 404 and forward to error handler
 app.use( function ( req, res, next ) {
   const err = new Error( "Not Found" );
