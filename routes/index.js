@@ -15,10 +15,10 @@ router.get( "/register", ( req, res ) => {
 
 router.post( "/register", ( req, res ) => {
 
-  Account.resigter( new Account( { username: req.body.username } ), req.body.password, ( err, account ) => {
+  Account.register( new Account( { username: req.body.username } ), req.body.password, ( err, account ) => {
 
     if ( err ) {
-      return res.render( "register", { account: account } );
+      return res.render( "register", { info: err } );
     }
 
     passport.authenticate( "local" )( req, res, () => {
@@ -33,7 +33,7 @@ router.get( "/login", ( req, res ) => {
   res.render( "login", { user: req.user } );
 } );
 
-router.post( "/login", passport.authenticate( "local" ), ( req, res ) => {
+router.post( "/login", passport.authenticate( "local", { failureRedirect: "/login", failureFlash: 'Blah blah!' } ), ( req, res ) => {
   res.redirect( "/" );
 } );
 
